@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas SQL</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #00796b;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label, input, textarea {
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #ffffff;
+            background-color: #00796b;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #004d40;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Consultas SQL</h1>
+        <form action="/consultas" method="POST" onsubmit="return validateForm()">
+            <label for="atributos">Atributos (A):</label>
+            <input type="text" id="atributos" name="atributos" required>
+
+            <label for="tablas">Tablas (T):</label>
+            <input type="text" id="tablas" name="tablas" required>
+
+            <label for="condiciones">Condiciones (C):</label>
+            <input type="text" id="condiciones" name="condiciones">
+
+            <input type="submit" class="button" value="Ejecutar consulta">
+            <div id="error" class="error"></div>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            const atributos = document.getElementById('atributos').value.trim();
+            const tablas = document.getElementById('tablas').value.trim();
+            const condiciones = document.getElementById('condiciones').value.trim();
+            const errorDiv = document.getElementById('error');
+            
+            errorDiv.textContent = '';  // Clear any previous error messages
+            
+            if (!atributos || !tablas) {
+                errorDiv.textContent = 'Los campos Atributos y Tablas son obligatorios.';
+                return false;
+            }
+
+            const validCharacters = /^[a-zA-Z0-9_,\s]+$/;
+            if (!validCharacters.test(atributos) || !validCharacters.test(tablas) || (condiciones && !validCharacters.test(condiciones))) {
+                errorDiv.textContent = 'Formato incorrecto en Atributos, Tablas o Condiciones.';
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>
