@@ -88,3 +88,34 @@ finally:
         cursor.close()
     if conexion:
         conexion.close()
+
+try:
+    conexion = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+    # Crear un cursor
+    cursor = conexion.cursor()
+    # Consulta para seleccionar todos los datos de la tabla 'clientes'
+    seleccionar_query = "SELECT * FROM restaurantes;"
+    
+    cursor.execute(seleccionar_query)
+    # Obtener todos los registros
+    registros = cursor.fetchall()
+
+    # Imprimir los registros
+    for registro in registros:
+        print(registro)
+
+except Error as e:
+    print(f"Error de conexión o durante la operación en la base de datos: {e}")
+
+finally:
+
+    if cursor:
+        cursor.close()
+    if conexion:
+        conexion.close()
