@@ -7,6 +7,7 @@ DB_PORT = '5432'
 DB_USER = 'grupo64'
 DB_PASSWORD = 'grupo64'
 DB_NAME = 'grupo64e2'
+archivo_csv = '../datos e2/pedidos2.csv'
 
 # Ruta del archivo CSV
 archivo_csv = '../datos e2/clientes.csv'
@@ -77,6 +78,13 @@ try:
 
     # Confirmar la inserción
     conexion.commit()
+
+    fetch_cleaned_data_query = "SELECT * FROM Clientes"
+    cursor.execute(fetch_cleaned_data_query)
+    cleaned_data = cursor.fetchall()
+    
+    for row in cleaned_data:
+        print(row)
 
 except Error as e:
     print(f"Error de conexión o durante la operación en la base de datos: {e}")
