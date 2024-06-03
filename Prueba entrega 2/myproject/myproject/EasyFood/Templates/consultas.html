@@ -70,24 +70,30 @@
             color: red;
             margin-top: 10px;
         }
+
+        .consultas {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            white-space: pre-line;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Consultas SQL</h1>
-        <form action="/consultas" method="POST" onsubmit="return validateForm()">
-            <label for="atributos">Atributos (A):</label>
-            <input type="text" id="atributos" name="atributos" required>
-
-            <label for="tablas">Tablas (T):</label>
-            <input type="text" id="tablas" name="tablas" required>
-
-            <label for="condiciones">Condiciones (C):</label>
-            <input type="text" id="condiciones" name="condiciones">
-
+        <form method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            {{ form.as_p }}
             <input type="submit" class="button" value="Ejecutar consulta">
             <div id="error" class="error"></div>
         </form>
+        <div id="consultas-realizadas" class="consultas"></div>
     </div>
 
     <script>
@@ -96,20 +102,26 @@
             const tablas = document.getElementById('tablas').value.trim();
             const condiciones = document.getElementById('condiciones').value.trim();
             const errorDiv = document.getElementById('error');
+            const consultasDiv = document.getElementById('consultas-realizadas');
             
-            errorDiv.textContent = '';  // Clear any previous error messages
+            // Reset error message
+            errorDiv.textContent = ''; 
             
+            // Check if required fields are filled
             if (!atributos || !tablas) {
                 errorDiv.textContent = 'Los campos Atributos y Tablas son obligatorios.';
                 return false;
             }
 
-            const validCharacters = /^[a-zA-Z0-9_,\s]+$/;
+            // Regex to validate input format
+            const validCharacters = /^[a-zA-Z0-9_,\*\s]+$/;
             if (!validCharacters.test(atributos) || !validCharacters.test(tablas) || (condiciones && !validCharacters.test(condiciones))) {
                 errorDiv.textContent = 'Formato incorrecto en Atributos, Tablas o Condiciones.';
                 return false;
             }
-
+            
+            // Display successful query input
+            consultasDiv.textContent += `Consulta realizada: Atributos - ${atributos}, Tablas - ${tablas}, Condiciones - ${condiciones}\n`;
             return true;
         }
     </script>
