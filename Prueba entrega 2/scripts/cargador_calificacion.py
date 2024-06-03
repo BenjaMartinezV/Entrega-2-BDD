@@ -9,7 +9,7 @@ DB_PASSWORD = 'grupo64'
 DB_NAME = 'grupo64e2'
 
 # Ruta del archivo CSV
-archivo_csv = '../datos e2/clientes.csv'
+archivo_csv = '../datos e2/calificacion.csv'
 
 # Configuración de la conexión
 try:
@@ -24,21 +24,18 @@ try:
     cursor = conexion.cursor()
 
     # Dropear la tabla si ya existe
-    drop_table_query = "DROP TABLE IF EXISTS clientes;"
+    drop_table_query = "DROP TABLE IF EXISTS calificacion;"
     cursor.execute(drop_table_query)
-    print("Tabla clientes eliminada si existía")
+    print("Tabla calificacion eliminada si existía")
 
     # Crear la tabla (ajusta esto según tu esquema de datos)
     crear_tabla_query = """
-    CREATE TABLE IF NOT EXISTS clientes (
+    CREATE TABLE IF NOT EXISTS calificacion (
         id SERIAL,
-        nombre varchar   NOT NULL,
-        email varchar   NOT NULL,
-        telefono varchar   NOT NULL,
-        clave varchar       NOT NULL,
-        direccion varchar   NOT NULL,
-        comuna varchar    NOT NULL,
-        CONSTRAINT pk_Cliente PRIMARY KEY (
+        id_pedido INT  NOT NULL,
+        ev_restaurant INT  NOT NULL,
+        ev_cliente INT   NOT NULL,
+        CONSTRAINT pk_cal PRIMARY KEY (
             id))
     """
     cursor.execute(crear_tabla_query)
@@ -46,30 +43,30 @@ try:
 
     # Preparar el query de inserción
     insercion_query = """
-    INSERT INTO clientes (nombre, email, telefono, clave, direccion, comuna)
-    VALUES (%s, %s, %s, %s, %s, %s);
+    INSERT INTO calificacion (id_pedido, ev_restaurant, ev_cliente)
+    VALUES (%s, %s, %s);
     """
 
     # Leer y procesar el archivo CSV
     with open(archivo_csv, 'r') as file:
-        lista_clientes = []
-        cliente_actual = ""
+        lista_calificacion = []
+        cal_actual = ""
         next(file)
         
         for linea in file:
-            cliente_actual += linea.strip()
-            valores = cliente_actual.split(';')
-            if len(valores) == 6:
-                lista_clientes.append(valores)
-                cliente_actual = ""
-            elif len(valores) > 6:
-                print(f"Línea malformada: {cliente_actual}")
-                cliente_actual = ""
+            cal_actual += linea.strip()
+            valores = cal_actual.split(';')
+            if len(valores) == 3:
+                lista_calificacion.append(valores)
+                cal_actual = ""
+            elif len(valores) > 3:
+                print(f"Línea malformada: {cal_actual}")
+                cal_actual = ""
 
 
-        for cliente in lista_clientes:
+        for cal in lista_calificacion:
             try:
-                cursor.execute(insercion_query, (cliente[0], cliente[1], cliente[2], cliente[3], cliente[4], cliente[5]))
+                cursor.execute(insercion_query, (cal[0], cal[1], cal[2]))
             except Error as e:
                     print(f"Error al insertar la línea {linea}: {e}")
                     conexion.rollback()
@@ -87,5 +84,3 @@ finally:
         cursor.close()
     if conexion:
         conexion.close()
-
-       
