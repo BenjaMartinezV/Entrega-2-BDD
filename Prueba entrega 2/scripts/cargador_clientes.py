@@ -2,20 +2,12 @@ import psycopg2
 from psycopg2 import sql
 from psycopg2 import Error
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d18d0188b592d124f968ca74e34ad8743f072c65
 DB_HOST = 'pavlov.ing.puc.cl'
 DB_PORT = '5432'
 DB_USER = 'grupo64'
 DB_PASSWORD = 'grupo64'
 DB_NAME = 'grupo64e2'
-<<<<<<< HEAD
 archivo_csv = '../datos e2/pedidos2.csv'
-
-=======
->>>>>>> d18d0188b592d124f968ca74e34ad8743f072c65
 
 # Ruta del archivo CSV
 archivo_csv = '../datos e2/clientes.csv'
@@ -63,12 +55,8 @@ try:
     with open(archivo_csv, 'r') as file:
         lista_clientes = []
         cliente_actual = ""
-<<<<<<< HEAD
-
-=======
         next(file)
         
->>>>>>> d18d0188b592d124f968ca74e34ad8743f072c65
         for linea in file:
             cliente_actual += linea.strip()
             valores = cliente_actual.split(';')
@@ -91,7 +79,6 @@ try:
     # Confirmar la inserción
     conexion.commit()
 
-<<<<<<< HEAD
     fetch_cleaned_data_query = "SELECT * FROM Clientes"
     cursor.execute(fetch_cleaned_data_query)
     cleaned_data = cursor.fetchall()
@@ -99,8 +86,6 @@ try:
     for row in cleaned_data:
         print(row)
 
-=======
->>>>>>> d18d0188b592d124f968ca74e34ad8743f072c65
 except Error as e:
     print(f"Error de conexión o durante la operación en la base de datos: {e}")
 
@@ -109,10 +94,4 @@ finally:
     if cursor:
         cursor.close()
     if conexion:
-<<<<<<< HEAD
         conexion.close()
-=======
-        conexion.close()
-
-       
->>>>>>> d18d0188b592d124f968ca74e34ad8743f072c65
